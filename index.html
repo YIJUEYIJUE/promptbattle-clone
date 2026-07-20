@@ -8,39 +8,197 @@
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <!-- ═══ Header / Navigation (fixed top) ═══ -->
+<body data-theme="dark">
+
+  <!-- ═══════════════════════════════════════
+       Header / Navigation (fixed)
+       ═══════════════════════════════════════ -->
   <header id="site-header">
     <div class="header-inner">
-      <a href="#" class="brand">
+      <!-- left: section label -->
+      <div class="header-label" id="nav-label">作品展示</div>
+
+      <!-- center: logo -->
+      <a class="brand" href="#" onclick="switchView('gallery');return false;">
         <img src="assets/logo.svg" alt="BATTLE UNIVERSE" class="logo-img" />
       </a>
-      <nav class="nav-links">
-        <a href="#gallery" class="nav-link active">画廊</a>
-        <a href="#about" class="nav-link">关于</a>
-        <a href="#rankings" class="nav-link">排行榜</a>
-      </nav>
+
+      <!-- right: actions -->
+      <div class="header-actions">
+        <button class="h-btn h-btn-icon" title="加入社群" onclick="openWechatModal()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 4.882-1.978 7.272-1.978-.276-3.399-3.73-6.198-8.015-6.198zm-2.43 5.695a.911.911 0 01 .917-.917.911.911 0 01 .917.917.911.911 0 01-.917.917.911.911 0 01-.917-.917zm5.22 0a.911.911 0 01 .917-.917.911.911 0 01 .917.917.911.911 0 01-.917.917.911.911 0 01-.917-.917z" fill="currentColor"/><path d="M16.735 11.178c-4.357 0-7.897 2.896-7.897 6.461 0 1.847.992 3.508 2.509 4.642a.493.493 0 01 .178.555l-.326 1.236c-.016.058-.04.117-.04.178 0 .136.108.246.243.246a.272.272 0 00.139-.045l1.591-.93a.722.722 0 01.599-.082 8.5 8.5 0 002.37.336c4.357 0 7.897-2.896 7.897-6.461s-3.54-6.136-7.863-6.136zm-3.825 4.633a.761.761 0 01 .765-.765.761.761 0 01 .765.765.761.761 0 01-.765.765.761.761 0 01-.765-.765zm4.357 0a.761.761 0 01 .765-.765.761.761 0 01 .765.765.761.761 0 01-.765.765.761.761 0 01-.765-.765z" fill="currentColor"/></svg>
+        </button>
+        <button class="h-btn h-btn-icon" id="btn-theme" title="切换主题">
+          <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor" opacity=".45"/></svg>
+        </button>
+        <button class="h-btn h-btn-login" id="btn-login" onclick="openLoginModal()">登录</button>
+      </div>
     </div>
   </header>
 
-  <!-- ═══ Hero Banner ═══ -->
-  <section id="hero">
+  <!-- ═══════════════════════════════════════
+       Hero Banner
+       ═══════════════════════════════════════ -->
+  <section id="hero" class="hero-section">
     <div class="hero-inner">
       <img src="assets/hero-title.svg" alt="Prompt Battle" class="hero-graphic" />
     </div>
+    <!-- CTA bar below hero on gallery view only -->
+    <div class="hero-cta-bar">
+      <button class="cta-primary" onclick="switchView('compete')">
+        ✦ 参赛投稿
+      </button>
+      <button class="cta-secondary" onclick="switchView('rankings')">
+        🏆 排行榜
+      </button>
+      <button class="cta-secondary" onclick="switchView('about')">
+        ℹ 关于平台
+      </button>
+    </div>
   </section>
 
-  <!-- ═══ Main Gallery — Masonry Grid ═══ -->
-  <main id="gallery">
-    <div class="gallery-grid" id="masonry-grid">
-      <!-- Cards injected by app.js from GALLERY_DATA -->
-    </div>
-    <div class="loading-indicator" id="loader">
+  <!-- ═══════════════════════════════════════
+       View: Gallery / 作品展示
+       ═══════════════════════════════════════ -->
+  <main id="view-gallery" class="view active-view">
+    <div class="gallery-grid" id="masonry-grid"></div>
+    <div class="loading-indicator show" id="loader">
       <span></span><span></span><span></span>
     </div>
+    <p class="gallery-end" style="display:none;">已经到底啦 ~</p>
   </main>
 
-  <!-- ═══ Footer ═══ -->
+  <!-- ═══════════════════════════════════════
+       View: Compete / 参赛投稿
+       ═══════════════════════════════════════ -->
+  <section id="view-compete" class="view">
+    <div class="compete-wrap">
+      <div class="compete-hero">
+        <div class="compete-badge">本期主题赛</div>
+        <h1 class="compete-title">PromptBattle · 第 42 回</h1>
+        <p class="compete-subtitle">「神经质」—— 用 AI 绘画出你心中最神经质的画面</p>
+        <div class="compete-meta">
+          <span>📅 截止时间：2025年9月30日 23:59</span>
+          <span>👥 已参赛：1,287 人</span>
+        </div>
+      </div>
+      <div class="compete-body">
+        <div class="compete-form-card">
+          <h2>提交你的作品</h2>
+          <form id="submit-form" onsubmit="return handleSubmit(event)">
+            <label>作品标题 <em>*</em></label>
+            <input type="text" placeholder="给你的作品起个名字" required />
+
+            <label>Prompt 提示词 <em>*</em></label>
+            <textarea rows="4" placeholder="输入你使用的 AI 提示词（可选公开展示）"></textarea>
+
+            <label>上传作品图片 <em>*</em></label>
+            <div class="upload-zone" id="upload-zone">
+              <div class="upload-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <p>点击或拖拽上传图片<br><small>支持 JPG / PNG / WebP，最大 10MB</small></p>
+              </div>
+              <input type="file" accept="image/*" hidden id="file-input" required />
+              <div class="upload-preview" id="upload-preview"></div>
+            </div>
+
+            <label>创作说明</label>
+            <textarea rows="3" placeholder="说说你的创作思路或灵感来源（选填）"></textarea>
+
+            <div class="form-row">
+              <button type="submit" class="submit-btn">🚀 提交参赛</button>
+            </div>
+          </form>
+        </div>
+        <aside class="compete-rules">
+          <h3>⚡ 赛事规则</h3>
+          <ol>
+            <li>使用任意 AI 绘画工具（Midjourney / Stable Diffusion / DALL·E 等）生成作品</li>
+            <li>每轮主题不同，围绕主题词自由发挥</li>
+            <li>每人每轮最多提交 3 幅作品</li>
+            <li>作品需为原创 AI 生成，禁止搬运、盗用他人作品</li>
+            <li>社区投票 + 专家评审综合排名，每周公布结果</li>
+            <li>优胜作品将获得社区推荐与曝光奖励</li>
+          </ol>
+          <hr>
+          <h3>🏆 奖励</h3>
+          <ul>
+            <li><b>第 1 名：</b>BATTLE UNIVERSE 社区首页置顶推荐 + 荣誉徽章</li>
+            <li><b>第 2–3 名：</b>社群专属头像框 + 创作者标签</li>
+            <li><b>第 4–10 名：</b>精选收录到「佳作廊」</li>
+            <li><b>所有参与者：</b>获得本次赛事参与证书</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       View: Rankings / 排行榜
+       ═══════════════════════════════════════ -->
+  <section id="view-rankings" class="view">
+    <div class="rankings-wrap">
+      <h1 class="page-title">🏆 排行榜</h1>
+      <div class="rank-tabs">
+        <button class="rank-tab active" onclick="filterRank(this,'all')">全部</button>
+        <button class="rank-tab" onclick="filterRank(this,'week')">本周</button>
+        <button class="rank-tab" onclick="filterRank(this,'month')">本月</button>
+      </div>
+      <table class="rank-table" id="rank-table">
+        <thead><tr><th>#</th><th>作品</th><th>标题</th><th>创作者</th><th>票数</th></tr></thead>
+        <tbody id="rank-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       View: About / 关于
+       ═══════════════════════════════════════ -->
+  <section id="view-about" class="view">
+    <div class="about-wrap">
+      <h1 class="page-title">关于 BATTLE UNIVERSE</h1>
+      <div class="about-body">
+        <div class="about-intro">
+          <img src="assets/logo.svg" alt="" class="about-logo-lg" />
+          <h2>PromptBattle 是什么？</h2>
+          <p>Battle Universe（战斗宇宙）是一个面向 AI 创作者的<strong>出图对战平台</strong>。我们相信 AI 生成的图像不仅是技术的产物，更是创意的表达。</p>
+          <p>每一期发布一个主题词，参赛者使用任意 AI 工具围绕主题创作，由社区投票选出最打动人心的作品。</p>
+        </div>
+        <div class="about-features">
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>自由创作</h3>
+            <p>不限工具、不限风格。Midjourney、Stable Diffusion、DALL·E、ComfyUI……用你最顺手的工具来战！</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚔️</div>
+            <h3>公平对战</h3>
+            <p>社区投票 + 专家评审双轨制。匿名评审避免偏见，让好作品自己说话。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌟</div>
+            <h3>持续成长</h3>
+            <p>每轮比赛后获得反馈和灵感，在竞技中不断突破自己的创作边界。</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>创作者社区</h3>
+            <p>加入微信社群，与其他 AI 创作者交流技巧、分享心得、共同进步。</p>
+          </div>
+        </div>
+        <div class="about-stats">
+          <div class="stat"><b>12,000+</b><span>参赛作品</span></div>
+          <div class="stat"><b>3,200+</b><span>注册创客</span></div>
+          <div class="stat"><b>42</b><span>已结束赛次</span></div>
+          <div class="stat"><b>∞</b><span>想象力上限</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       Footer
+       ═══════════════════════════════════════ -->
   <footer id="site-footer">
     <div class="footer-inner">
       <div class="footer-brand">
@@ -48,13 +206,89 @@
         <p class="footer-tagline">PromptBattle — AI 出图对战平台</p>
       </div>
       <div class="footer-links">
+        <a href="#" onclick="switchView('gallery')">画廊</a>
+        <a href="#" onclick="switchView('compete')">参赛投稿</a>
+        <a href="#" onclick="switchView('rankings')">排行榜</a>
+        <a href="#" onclick="switchView('about')">关于</a>
         <a href="#">使用条款</a>
         <a href="#">隐私政策</a>
-        <a href="#">联系我们</a>
       </div>
       <div class="footer-copy">&copy; 2025 BATTLE UNIVERSE. All rights reserved.</div>
     </div>
   </footer>
+
+  <!-- ═══════════════════════════════════════
+       MODALS
+       ═══════════════════════════════════════ -->
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="modal-login" onclick="closeOnOverlay(event,'modal-login')">
+    <div class="modal modal--login">
+      <button class="modal-close" onclick="closeModal('modal-login')">&times;</button>
+      <h3>登录</h3>
+      <form autocomplete="off" onsubmit="return false;">
+        <div class="field"><input type="tel" placeholder="手机号" /></div>
+        <div class="field field--pw"><input type="password" placeholder="密码" /><button type="button" class="toggle-pw" onclick="this.previousElementSibling.type=this.previousElementSibling.type==='password'?'text':'password';this.textContent=this.textContent==='🙈':'👁️';">👁️</button></div>
+        <div class="field-links"><a href="#">忘记密码？</a></div>
+        <button class="btn btn--primary btn--block" onclick="doLogin()">登录</button>
+        <div class="field-links center"><a href="#" onclick="closeModal('modal-login');openRegisterModal()">注册账号</a></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal-overlay" id="modal-register" onclick="closeOnOverlay(event,'modal-register')">
+    <div class="modal modal--login">
+      <button class="modal-close" onclick="closeModal('modal-register')">&times;</button>
+      <h3>注册账号</h3>
+      <form autocomplete="off" onsubmit="return false;">
+        <div class="field"><input type="tel" placeholder="手机号" /></div>
+        <div class="field"><input type="text" placeholder="昵称" /></div>
+        <div class="field"><input type="password" placeholder="设置密码" /></div>
+        <div class="field"><input type="text" placeholder="验证码" /></div>
+        <button class="btn btn--primary btn--block" onclick="alert('注册功能演示 — 实际接入后端 API 即可完成注册')">立即注册</button>
+        <div class="field-links center">已有账号？<a href="#" onclick="closeModal('modal-register');openLoginModal()">去登录</a></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- WeChat QR Modal -->
+  <div class="modal-overlay" id="modal-wechat" onclick="closeOnOverlay(event,'modal-wechat')">
+    <div class="modal modal--wechat">
+      <button class="modal-close" onclick="closeModal('modal-wechat')">&times;</button>
+      <h3>「加入 BATTLEVERSE 社群」</h3>
+      <p class="wechat-desc">获取赛事信息 · 创作者交流 · 更多福利</p>
+      <div class="qr-box">
+        <!-- Simulated QR code pattern -->
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" rx="16" fill="#fff"/>
+          <g fill="#111"><rect x="20" y="20" width="56" height="56" rx="4"/><rect x="124" y="20" width="56" height="56" rx="4"/><rect x="20" y="124" width="56" height="56" rx="4"/>
+            <rect x="28" y="28" width="40" height="40" rx="2" fill="#fff"/><rect x="132" y="28" width="40" height="40" rx="2" fill="#fff"/><rect x="28" y="132" width="40" height="40" rx="2" fill="#fff"/>
+            <rect x="36" y="36" width="24" height="24" fill="#111"/><rect x="140" y="36" width="24" height="24" fill="#111"/><rect x="36" y="140" width="24" height="24" fill="#111"/>
+            <rect x="88" y="24" width="24" height="24" rx="2"/><rect x="88" y="60" width="24" height="24" rx="2"/><rect x="88" y="96" width="24" height="24" rx="2"/><rect x="88" y="132" width="24" height="24" rx="2"/><rect x="88" y="168" width="24" height="24" rx="2"/>
+            <rect x="124" y="96" width="16" height="16" rx="2"/><rect x="152" y="96" width="16" height="16" rx="2"/><rect x="124" y="132" width="16" height="16" rx="2"/><rect x="152" y="132" width="16" height="16" rx="2"/><rect x="152" y="168" width="16" height="16" rx="2"/><rect x="120" y="168" width="16" height="16" rx="2"/>
+            <rect x="24" y="96" width="16" height="16" rx="2"/><rect x="52" y="96" width="16" height="16" rx="2"/><rect x="24" y="132" width="16" height="16" rx="2"/><rect x="52" y="132" width="16" height="16" rx="2"/><rect x="52" y="168" width="16" height="16" rx="2"/><rect x="24" y="168" width="16" height="16" rx="2"/>
+          </g>
+        </svg>
+      </div>
+      <button class="btn btn--accent btn--block mt-sm">微信扫码加入</button>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="modal-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-content">
+      <button class="lb-close" aria-label="关闭">&times;</button>
+      <img class="lb-img" alt="" />
+      <div class="lb-info">
+        <div class="lb-title"></div>
+        <div class="lb-author"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Success Toast -->
+  <div id="toast" class="toast"></div>
 
   <script src="app.js"></script>
 </body>
